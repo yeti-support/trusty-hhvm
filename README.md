@@ -9,6 +9,9 @@ Place your application (or application volume) at `/var/www/app`, with public do
 ### Default User
 HHVM and nginx are configured to drop privileges to the `www-data` user.
 
+### Exposed Port
+Nginx is exposed on port 80
+
 ### Laravel Example
 ```dockerfile
 FROM yetisupport/trusty-hhvm:3.9
