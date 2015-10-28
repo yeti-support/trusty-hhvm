@@ -3,8 +3,8 @@
 ### Abstract
 Provides HHVM running on top of Ubuntu Trusty, with an nginx web server.
 
-### Paths and Volumes
-Place your application (or application volume) at `/var/www/app`, with public document root at `/var/www/app/public`; and if you're using sessions mount `/var/lib/hhvm/sessions` as an external volume to persist.
+### Paths
+Place your application (or application volume) at `/var/www/app` with public document root at `/var/www/app/public`.  If your application uses sessions, mount `/var/lib/hhvm/sessions` as an external volume.
 
 ### Default User
 HHVM and nginx are configured to drop privileges to the `www-data` user.
