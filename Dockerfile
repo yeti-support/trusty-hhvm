@@ -1,19 +1,24 @@
 FROM ubuntu:trusty
 
-RUN useradd -u 1001 nonpriv
+VOLUME /var/lib/hhvm/sessions
+VOLUME /var/www/app
 
 RUN apt-get install -y software-properties-common
 RUN apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0x5a16e7281be7a449
 RUN add-apt-repository -y "deb http://dl.hhvm.com/ubuntu trusty-lts-3.9 main"
 RUN apt-get update -y
-RUN apt-get install -y hhvm ruby
-RUN gem install prmd
+RUN apt-get install -y hhvm nginx
 
-ADD server.ini /etc/hhvm/server.ini
-ADD php.ini /etc/hhvm/php.ini
+ADD nginx /etc/nginx
+ADD hhvm/server.ini /etc/hhvm/server.ini
+ADD hhvm/php.ini /etc/hhvm/php.ini
+ADD index.php /var/www/app/public/index.php
+ADD run.sh /var/www/run.sh
 
-VOLUME /var/lib/hhvm/sessions
-VOLUME /var/www/html
+RUN rm -f /var/log/nginx/access.log; ln -s /dev/stdout /var/log/nginx/access.log
+RUN rm -f /var/log/nginx/error.log; ln -s /dev/stderr /var/log/nginx/error.log
 
-USER nonpriv
-CMD /usr/bin/hhvm --config /etc/hhvm/php.ini --config /etc/hhvm/server.ini --mode daemon -vPidFile=/var/run/hhvm/pid
+WORKDIR /var/www/app
+EXPOSE 80
+
+CMD /var/www/run.sh
